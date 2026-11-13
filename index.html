@@ -2,949 +2,144 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> <title>Free Online PDF Signer: Sign PDFs in Your Browser</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Free Online PDF Signer: Sign PDFs in Your Browser</title>
 <meta name="description" content="Sign PDFs free in your browser. Draw, type or upload a signature, add initials, dates and text, then download. Your files never leave your device.">
-
-<!-- Keywords -->
 <meta name="keywords" content="PDF signer, sign PDF online, free PDF signature, e-sign PDF, add signature to PDF, draw signature, type signature, PDF initials, browser PDF signing">
-
-<!-- Canonical: the exact final URL of this page -->
-<link rel="canonical" href="https://countersign-lemon.vercel.app/">
-
-<!-- Robots -->
 <meta name="robots" content="index, follow, max-image-preview:large">
-
-<!-- Author and publisher -->
-<meta name="author" content="Arnold Elacion Jr">
-<meta name="publisher" content="Freelance Developer">
-<link rel="author" href="https://www.linkedin.com/in/arnelacion/">
-<link rel="publisher" href="https://1maginativepen.github.io/arnelacion/">
+<meta name="author" content="Your Name">
+<meta name="publisher" content="Your Name or Company">
+<link rel="canonical" href="https://YOUR-DOMAIN.com/">
+<meta property="og:title" content="Free Online PDF Signer: Sign PDFs in Your Browser">
+<meta property="og:description" content="Draw, type or upload a signature, add initials, dates and text, then download. Your files never leave your device.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;500;600&family=Caveat:wght@500&family=Dancing+Script:wght@500&family=Mr+Dafoe&family=Yellowtail&family=Sacramento&family=Homemade+Apple&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
-/* Layout: top bar, a tools rail on the left, a grey "desk" on the right where white pages stack and signatures are dragged onto them. */
+/* Layout: one centred column, full height. Wordmark top-left, then headline, a drawn signature line, subheading and a single button in the middle of the screen. */
 :root {
-  --desk: #e4e8ef;
-  --surface: #ffffff;
-  --surface-2: #f2f4f9;
+  --bg: #e9ecf3;
   --ink: #141824;
-  --muted: #586177;
-  --line: #d2d8e3;
+  --muted: #566077;
+  --line: #b9c1d3;
   --accent: #2f43d9;
   --accent-ink: #ffffff;
-  --accent-soft: #e2e6ff;
-  --danger: #c2362f;
-  --paper: #ffffff;
-  --pad-line: #c3cadb;
-  --shadow: 0 1px 2px rgba(20, 24, 36, .08), 0 10px 30px rgba(20, 24, 36, .14);
   --f-display: 'Bricolage Grotesque', 'Instrument Sans', system-ui, sans-serif;
   --f-body: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --desk: #0e1016; --surface: #181b24; --surface-2: #1f232e; --ink: #e9ecf4; --muted: #9aa3b8;
-    --line: #2b3040; --accent: #8d9cff; --accent-ink: #0e1230; --accent-soft: #252b52; --danger: #ff8a80;
-    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px rgba(0, 0, 0, .5);
+    --bg: #0e1016; --ink: #e9ecf4; --muted: #9aa3b8; --line: #343a4d; --accent: #8d9cff; --accent-ink: #0e1230;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --desk: #0e1016; --surface: #181b24; --surface-2: #1f232e; --ink: #e9ecf4; --muted: #9aa3b8;
-  --line: #2b3040; --accent: #8d9cff; --accent-ink: #0e1230; --accent-soft: #252b52; --danger: #ff8a80;
-  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px rgba(0, 0, 0, .5);
+  --bg: #0e1016; --ink: #e9ecf4; --muted: #9aa3b8; --line: #343a4d; --accent: #8d9cff; --accent-ink: #0e1230;
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
-[hidden] { display: none !important; }
 html, body { height: 100%; }
 body {
   margin: 0;
-  background: var(--desk);
+  background: var(--bg);
   color: var(--ink);
-  font: 14px/1.45 var(--f-body);
+  font: 17px/1.55 var(--f-body);
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  overflow: hidden;
+  grid-template-rows: auto 1fr auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px;
 }
-button, input { font: inherit; color: inherit; }
-button { cursor: pointer; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-/* top bar */
-.bar {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
-  padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
-  background: var(--surface); border-bottom: 1px solid var(--line);
+.brand {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 700 19px/1 var(--f-display); letter-spacing: -.02em; color: var(--ink); text-decoration: none; justify-self: start;
 }
-.brand { display: flex; align-items: center; gap: 8px; font: 700 18px/1 var(--f-display); letter-spacing: -.02em; margin-right: 6px; }
 .brand svg { width: 26px; height: 26px; stroke: var(--accent); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.file { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 140px; color: var(--muted); }
-.file b { color: var(--ink); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.tag { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; background: var(--accent-soft); color: var(--accent); padding: 2px 7px; border-radius: 99px; font-weight: 600; flex: none; }
-.group { display: flex; align-items: center; gap: 4px; }
-.group .val { min-width: 54px; text-align: center; font-variant-numeric: tabular-nums; color: var(--muted); }
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  border: 1px solid var(--line); background: var(--surface); border-radius: 8px;
-  padding: 7px 12px; font-weight: 500; line-height: 1.2;
-}
-.btn:hover { background: var(--surface-2); }
-.btn.sq { padding: 7px 10px; min-width: 34px; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
-.btn.primary:hover { filter: brightness(1.08); }
-.btn:disabled { opacity: .45; cursor: not-allowed; filter: none; }
-.link { background: none; border: 0; padding: 2px 0; color: var(--danger); font-weight: 500; }
-.link:hover { text-decoration: underline; }
 
-/* workspace */
-.workspace { display: grid; grid-template-columns: 288px minmax(0, 1fr); min-height: 0; }
-.tools {
-  background: var(--surface); border-right: 1px solid var(--line);
-  padding: 18px 16px 24px max(16px, env(safe-area-inset-left, 0px));
-  overflow: auto; display: flex; flex-direction: column; gap: 22px; min-height: 0;
+main {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 22px; padding-block: 24px 64px; min-width: 0;
 }
-.tools h3 { margin: 0 0 8px; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-.stack { display: flex; flex-direction: column; gap: 8px; }
-.tool {
-  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 10px 12px; text-align: left; font-weight: 500;
+h1 {
+  margin: 0; max-width: 15ch;
+  font: 700 clamp(2.5rem, 7.5vw, 4.75rem)/1.02 var(--f-display);
+  letter-spacing: -.035em; text-wrap: balance;
 }
-.tool:hover { background: var(--surface-2); }
-.tool small { color: var(--muted); font-weight: 400; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { position: relative; }
-.chip .use {
-  display: block; width: 112px; height: 52px; padding: 4px 6px; background: var(--paper);
-  border: 1px solid var(--line); border-radius: 8px;
-}
-.chip .use:hover { border-color: var(--accent); }
-.chip .use img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.chip .del {
-  position: absolute; top: -7px; right: -7px; width: 20px; height: 20px; border-radius: 50%; padding: 0;
-  border: 1px solid var(--line); background: var(--surface); color: var(--muted); line-height: 1; font-size: 13px; display: none;
-}
-.chip:hover .del, .chip:focus-within .del { display: block; }
-.note { color: var(--muted); font-size: 12.5px; margin: 0; }
-.spacer { flex: 1; }
+.sub { margin: 0; max-width: 34em; color: var(--muted); font-size: clamp(1.05rem, 2.2vw, 1.25rem); text-wrap: balance; }
 
-.selpanel { border: 1px solid var(--line); background: var(--surface-2); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-.sel-head { display: flex; justify-content: space-between; align-items: center; }
-.field { display: flex; flex-direction: column; gap: 4px; }
-.field label, .field .lbl { font-size: 12px; color: var(--muted); }
-input[type="text"] { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
-.seg { display: flex; gap: 6px; }
-.seg button { flex: 1; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); display: flex; align-items: center; justify-content: center; gap: 6px; }
-.seg button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
-.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.sigline { width: min(300px, 70%); height: auto; overflow: visible; }
+.sigline .base { stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 2 6; stroke-linecap: round; }
+.sigline .x { stroke: var(--muted); stroke-width: 2; stroke-linecap: round; }
+.sigline .ink { stroke: var(--accent); stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
 
-/* desk and pages */
-.desk { position: relative; overflow: auto; min-height: 0; padding: 24px max(12px, env(safe-area-inset-right, 0px)) 110px; }
-.desk.dragging { outline: 2px dashed var(--accent); outline-offset: -10px; }
-#pages { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-.page { position: relative; flex: none; background: var(--paper); box-shadow: var(--shadow); }
-.page canvas { display: block; width: 100%; height: 100%; }
-.layer { position: absolute; inset: 0; overflow: visible; }
-.armed .page { cursor: crosshair; }
-.item { position: absolute; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
-.item:active { cursor: grabbing; }
-.item img { width: 100%; height: 100%; display: block; pointer-events: none; }
-.item:hover { outline: 1px dashed var(--accent); outline-offset: 2px; }
-.item.sel { outline: 2px solid var(--accent); outline-offset: 2px; }
-.item .x, .item .rz { position: absolute; background: var(--accent); border: 2px solid var(--surface); }
-.item .x { top: -16px; right: -16px; width: 22px; height: 22px; border-radius: 50%; color: var(--accent-ink); padding: 0; display: grid; place-items: center; font-size: 14px; line-height: 1; }
-.item .rz { right: -9px; bottom: -9px; width: 16px; height: 16px; border-radius: 4px; cursor: nwse-resize; }
-@media (pointer: coarse) {
-  .item .x { width: 30px; height: 30px; top: -22px; right: -22px; }
-  .item .rz { width: 26px; height: 26px; right: -14px; bottom: -14px; }
+.cta {
+  display: inline-flex; align-items: center; gap: 12px; margin-top: 6px;
+  background: var(--accent); color: var(--accent-ink); text-decoration: none;
+  font: 600 1.125rem/1 var(--f-body); padding: 18px 32px; border-radius: 12px;
+  transition: transform .15s ease, filter .15s ease;
 }
+.cta:hover { filter: brightness(1.08); transform: translateY(-2px); }
+.cta:active { transform: translateY(0); }
+.cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.cta svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .15s ease; }
+.cta:hover svg { transform: translateX(3px); }
 
-.empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; }
-.empty div { max-width: 340px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
-.empty h2 { margin: 0; font: 700 22px/1.2 var(--f-display); letter-spacing: -.02em; }
-.empty p { margin: 0; color: var(--muted); }
-
-.hint, .toast {
-  position: fixed; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--surface);
-  border-radius: 99px; padding: 9px 16px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px; z-index: 30; max-width: calc(100% - 32px);
+footer {
+  border-top: 1px solid var(--line); padding-top: 20px; margin-top: 8px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+  color: var(--muted); font-size: 14.5px;
 }
-.hint { bottom: max(22px, env(safe-area-inset-bottom, 0px)); }
-.toast { top: 70px; }
-.hint button { background: none; border: 0; text-decoration: underline; padding: 0; color: inherit; }
+footer .who { margin: 0; }
+footer .who strong { color: var(--ink); font-weight: 600; }
+footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 20px; }
+footer a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; }
+footer a:hover { text-decoration-color: var(--accent); color: var(--accent); }
+footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+@media (max-width: 560px) { footer { flex-direction: column; align-items: flex-start; } }
 
-/* dialog */
-.scrim { position: fixed; inset: 0; background: rgba(10, 12, 20, .58); display: grid; place-items: center; padding: 16px; z-index: 50; }
-.dlg { width: min(640px, 100%); max-height: 100%; overflow: auto; background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); padding: 18px; display: flex; flex-direction: column; gap: 14px; }
-.dlg-head { display: flex; justify-content: space-between; align-items: center; }
-.dlg-head h2 { margin: 0; font: 700 20px/1.2 var(--f-display); letter-spacing: -.02em; }
-.tabs { display: flex; gap: 4px; background: var(--surface-2); padding: 4px; border-radius: 10px; }
-.tabs button { flex: 1; border: 0; background: none; padding: 7px 10px; border-radius: 7px; font-weight: 500; color: var(--muted); }
-.tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, .15); }
-.pad { position: relative; height: 220px; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-.pad canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
-.pad::after { content: ""; position: absolute; left: 22px; right: 22px; bottom: 50px; border-top: 1px dashed var(--pad-line); pointer-events: none; }
-.pad .pl { position: absolute; left: 22px; bottom: 26px; font-size: 12px; color: #6b7388; pointer-events: none; }
-.fonts { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; margin-top: 10px; }
-.fonts button { height: 76px; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 4px 10px; font-size: 34px; line-height: 1.1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.fonts button[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
-.drop { display: grid; place-items: center; gap: 8px; min-height: 160px; border: 1.5px dashed var(--line); border-radius: 10px; padding: 16px; text-align: center; color: var(--muted); }
-.checker { background: repeating-conic-gradient(#e7eaf1 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px; border-radius: 8px; padding: 8px; }
-.checker img { max-width: 100%; max-height: 150px; display: block; margin: 0 auto; }
-.dlg-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-.dlg-foot .grow { flex: 1; }
-.check { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
-.row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 10px; }
-
-/* narrow screens: tools become a strip above the pages; the selection panel docks to the bottom */
-@media (max-width: 860px) {
-  .workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
-  .tools { flex-direction: row; align-items: flex-start; gap: 18px; overflow-x: auto; overflow-y: hidden; border-right: 0; border-bottom: 1px solid var(--line); padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px)); }
-  .tools > section, .tools > div { flex: none; }
-  .tools .stack { flex-direction: row; }
-  .tools .tool { width: auto; white-space: nowrap; }
-  .tools .tool small, .tools .note, .tools .spacer, .tools .zoomgroup { display: none; }
-  .chip .use { width: 96px; height: 42px; }
-  .selpanel {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; border-radius: 14px 14px 0 0; border-width: 1px 0 0;
-    padding: 12px max(16px, env(safe-area-inset-right, 0px)) max(14px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
-    box-shadow: var(--shadow);
-  }
-  .zoomgroup { display: none; }
-  .pad { height: 180px; }
+@media (prefers-reduced-motion: no-preference) {
+  .sigline .ink { animation: draw 1.4s .25s ease-out both; }
+  @keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 }
-@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
-body.busy { cursor: progress; }
+@media (prefers-reduced-motion: reduce) { .cta, .cta svg { transition: none; } }
 </style>
 </head>
 <body>
 
-<header class="bar">
-  <div class="brand">
-    <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3 20c3-10 5-13 7-13s0 13 3 13 3-8 5-8 2 4 7 4"/></svg>
-    Countersign
-  </div>
-  <div class="file"><b id="fileName">No file</b><span class="tag" id="sampleTag" hidden>Sample</span></div>
-  <div class="group" id="pageNav" hidden>
-    <button class="btn sq" id="prevPg" aria-label="Previous page">&#8249;</button>
-    <span class="val" id="pgLabel">1 / 1</span>
-    <button class="btn sq" id="nextPg" aria-label="Next page">&#8250;</button>
-  </div>
-  <div class="group zoomgroup" id="zoomGroup" hidden>
-    <button class="btn sq" id="zoomOut" aria-label="Zoom out">&minus;</button>
-    <span class="val" id="zoomLabel">100%</span>
-    <button class="btn sq" id="zoomIn" aria-label="Zoom in">+</button>
-    <button class="btn" id="zoomFit">Fit</button>
-  </div>
-  <button class="btn" id="openBtn">Upload PDF</button>
-  <button class="btn primary" id="downloadBtn" disabled>Download signed PDF</button>
-  <input type="file" id="fileInput" accept="application/pdf,.pdf" hidden>
-</header>
+<a class="brand" href="/" aria-label="Countersign home">
+  <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3 20c3-10 5-13 7-13s0 13 3 13 3-8 5-8 2 4 7 4"/></svg>
+  Countersign
+</a>
 
-<div class="workspace">
-  <aside class="tools" aria-label="Tools">
-    <section>
-      <h3>Signature</h3>
-      <div class="chips" id="savedSignature"></div>
-      <div class="stack" style="margin-top:8px"><button class="tool" id="newSignature">New signature <small>draw, type or upload</small></button></div>
-    </section>
-    <section>
-      <h3>Initials</h3>
-      <div class="chips" id="savedInitials"></div>
-      <div class="stack" style="margin-top:8px"><button class="tool" id="newInitials">New initials</button></div>
-    </section>
-    <section>
-      <h3>Fill in</h3>
-      <div class="stack">
-        <button class="tool" id="addDate">Today's date <small id="dateSample"></small></button>
-        <button class="tool" id="addText">Text</button>
-      </div>
-    </section>
+<main>
+  <h1>Sign any PDF in seconds, for free</h1>
 
-    <section class="selpanel" id="selPanel" hidden aria-label="Selected item">
-      <div class="sel-head"><strong id="selTitle">Signature</strong><button class="link" id="selDelete">Remove</button></div>
-      <div class="field" id="selTextRow"><label for="selText">Text</label><input id="selText" type="text" autocomplete="off"></div>
-      <div class="field" id="selColorRow"><span class="lbl">Ink</span>
-        <div class="seg">
-          <button type="button" data-color="#16181f" aria-pressed="true"><span class="dot" style="background:#16181f"></span>Black</button>
-          <button type="button" data-color="#1b2f9a" aria-pressed="false"><span class="dot" style="background:#1b2f9a"></span>Blue</button>
-        </div>
-      </div>
-      <button class="btn" id="selAll">Put on every page</button>
-    </section>
+  <svg class="sigline" viewBox="0 0 300 64" aria-hidden="true">
+    <path class="x" d="M14 30l12 12M26 30L14 42"/>
+    <path class="base" d="M10 52h280"/>
+    <path class="ink" pathLength="1" d="M44 40c10-26 20-30 26-30s-4 30 4 30 8-18 16-18 6 12 14 12 10-14 20-14 12 10 22 10 14-8 24-8"/>
+  </svg>
 
-    <div class="spacer"></div>
-    <p class="note">Signatures are stamped onto the page as images. They are visual marks, not certificate-based digital signatures. Your PDF never leaves this browser.</p>
-  </aside>
+  <p class="sub">Draw, type or upload your signature and place it anywhere on the page. No sign-up, and your documents are never uploaded or saved.</p>
 
-  <main class="desk" id="desk">
-    <div id="pages"></div>
-    <div class="empty" id="empty" hidden>
-      <div>
-        <h2 id="emptyTitle">Upload your PDF</h2>
-        <p id="emptyText">Choose a file or drop it anywhere on this page, then add your signature, initials, a date or text.</p>
-        <button class="btn primary" id="emptyOpen">Upload PDF</button>
-      </div>
-    </div>
-  </main>
-</div>
+  <!-- Change this link if the tool lives at a different address or filename -->
+  <a class="cta" href="countersign">
+    Sign your PDF
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+</main>
 
-<div class="hint" id="hint" hidden><span id="hintText">Click the page to place it.</span><button id="hintCancel">Cancel</button></div>
-<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<footer>
+  <p class="who">Designed and built by <strong>Arnold Elacion Jr</strong>, web developer. Available for freelance projects.</p>
+  <ul>
+    <li><a href="https://1maginativepen.github.io/arnelacion/" target="_blank" rel="noopener">Portfolio</a></li>
+    <li><a href="https://github.com/1maginativepen" target="_blank" rel="noopener">GitHub</a></li>
+    <li><a href="https://www.linkedin.com/in/arnelacion/" target="_blank" rel="noopener">LinkedIn</a></li>
+  </ul>
+</footer>
 
-<div class="scrim" id="dlg" hidden>
-  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
-    <div class="dlg-head"><h2 id="dlgTitle">Create your signature</h2><button class="btn sq" id="dlgClose" aria-label="Close">&times;</button></div>
-    <div class="tabs" role="tablist">
-      <button role="tab" id="tabDraw" aria-selected="true" data-tab="draw">Draw</button>
-      <button role="tab" id="tabType" aria-selected="false" data-tab="type">Type</button>
-      <button role="tab" id="tabUpload" aria-selected="false" data-tab="upload">Upload</button>
-    </div>
-
-    <div id="panelDraw">
-      <div class="pad"><canvas id="drawCanvas" aria-label="Signature drawing area"></canvas><span class="pl">Sign above the line</span></div>
-      <div class="row"><button class="btn" id="drawUndo">Undo</button><button class="btn" id="drawClear">Clear</button></div>
-    </div>
-
-    <div id="panelType" hidden>
-      <div class="field"><label for="typeInput" id="typeLabel">Your name</label><input id="typeInput" type="text" maxlength="40" autocomplete="off"></div>
-      <div class="fonts" id="fontGrid"></div>
-    </div>
-
-    <div id="panelUpload" hidden>
-      <div class="drop" id="upDrop">
-        <span>Choose a photo or scan of your signature (PNG or JPG).</span>
-        <button class="btn" id="upPick">Choose image</button>
-        <input type="file" id="upInput" accept="image/png,image/jpeg,image/webp" hidden>
-      </div>
-      <div class="checker" id="upPreviewWrap" hidden style="margin-top:10px"><img id="upPreview" alt="Uploaded signature preview"></div>
-      <label class="check" style="margin-top:10px"><input type="checkbox" id="upBg" checked> Remove white background</label>
-    </div>
-
-    <div class="dlg-foot">
-      <div class="seg" id="inkPick" style="min-width:190px">
-        <button type="button" data-color="#1b2f9a" aria-pressed="true"><span class="dot" style="background:#1b2f9a"></span>Blue ink</button>
-        <button type="button" data-color="#16181f" aria-pressed="false"><span class="dot" style="background:#16181f"></span>Black ink</button>
-      </div>
-      <label class="check"><input type="checkbox" id="remember" checked> Keep on this device</label>
-      <span class="grow"></span>
-      <button class="btn" id="dlgCancel">Cancel</button>
-      <button class="btn primary" id="dlgUse" disabled>Use signature</button>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-<script>
-(() => {
-  'use strict';
-
-  const $ = (s, r = document) => r.querySelector(s);
-  const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
-  const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
-
-  const BASE = 64;                       // font size (px) text items are rendered at
-  const FONT = 'Helvetica, Arial, "Liberation Sans", sans-serif';
-  const INK = { black: '#16181f', blue: '#1b2f9a' };
-  const KEY = 'countersign.saved.v1';
-  const SIG_FONTS = ['Caveat', 'Dancing Script', 'Mr Dafoe', 'Yellowtail', 'Sacramento', 'Homemade Apple'];
-  const ZOOMS = [0.6, 0.8, 1, 1.25, 1.5, 2, 2.5];
-
-  const state = {
-    name: '', sample: false, bytes: null, pdf: null, pages: [], items: [],
-    selected: null, armed: null, zoom: 1, scale: 1, current: 1,
-    saved: { signature: [], initials: [] }
-  };
-  let seq = 0;
-  const uid = () => 'i' + (++seq);
-
-  if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
-
-  const desk = $('#desk'), pagesEl = $('#pages');
-
-  /* ---------- small helpers ---------- */
-  let toastTimer = 0;
-  function toast(msg) {
-    const t = $('#toast'); t.textContent = msg; t.hidden = false;
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3800);
-  }
-  const todayStr = () => new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  const byId = id => state.items.find(i => i.id === id);
-  const selItem = () => byId(state.selected);
-  const hFrac = (it, P) => it.w * it.ar * P.w / P.h;
-
-  /* ---------- saved signatures ---------- */
-  function loadSaved() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) { const o = JSON.parse(raw); state.saved.signature = o.signature || []; state.saved.initials = o.initials || []; }
-    } catch (e) { /* storage unavailable */ }
-  }
-  function persist() { try { localStorage.setItem(KEY, JSON.stringify(state.saved)); } catch (e) { /* ignore */ } }
-  function renderSaved() {
-    for (const kind of ['signature', 'initials']) {
-      const box = $(kind === 'signature' ? '#savedSignature' : '#savedInitials');
-      box.replaceChildren();
-      for (const s of state.saved[kind]) {
-        const chip = el('div', 'chip');
-        const use = el('button', 'use'); use.type = 'button'; use.setAttribute('aria-label', 'Place saved ' + kind);
-        const img = new Image(); img.src = s.url; img.alt = ''; use.append(img);
-        use.addEventListener('click', () => arm({ kind, url: s.url, ar: s.ar }));
-        const del = el('button', 'del', '×'); del.type = 'button'; del.setAttribute('aria-label', 'Delete saved ' + kind);
-        del.addEventListener('click', () => { state.saved[kind] = state.saved[kind].filter(x => x.id !== s.id); persist(); renderSaved(); });
-        chip.append(use, del); box.append(chip);
-      }
-    }
-  }
-
-  /* ---------- loading a PDF ---------- */
-  async function loadPdf(bytes, name, sample) {
-    document.body.classList.add('busy');
-    try {
-      const pdf = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
-      const pages = [];
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const vp = page.getViewport({ scale: 1 });
-        pages.push({ n: i, page, w: vp.width, h: vp.height, rendered: 0, task: null, visible: false, el: null, canvas: null, layer: null });
-      }
-      if (state.pdf) { try { state.pdf.destroy(); } catch (e) { /* ignore */ } }
-      Object.assign(state, { pdf, bytes, name, sample: !!sample, pages, items: [], selected: null, armed: null, current: 1 });
-      arm(null);
-      buildPages();
-      layout();
-      desk.scrollTop = 0;
-      updateUI();
-    } catch (e) {
-      console.error(e);
-      const pw = e && (e.name === 'PasswordException');
-      toast(pw ? 'This PDF is password protected. Remove the password, then open it again.' : 'That file could not be opened as a PDF.');
-      updateUI();
-    } finally {
-      document.body.classList.remove('busy');
-    }
-  }
-
-  const io = new IntersectionObserver(entries => {
-    for (const e of entries) {
-      const p = state.pages[+e.target.dataset.n - 1];
-      if (!p) continue;
-      p.visible = e.isIntersecting;
-      if (p.visible) renderPage(p);
-    }
-  }, { root: desk, rootMargin: '900px 0px' });
-
-  function buildPages() {
-    io.disconnect();
-    pagesEl.replaceChildren();
-    for (const p of state.pages) {
-      const wrap = el('div', 'page'); wrap.dataset.n = p.n;
-      p.canvas = el('canvas'); p.layer = el('div', 'layer');
-      wrap.append(p.canvas, p.layer); pagesEl.append(wrap);
-      p.el = wrap; io.observe(wrap);
-    }
-  }
-
-  function layout() {
-    if (!state.pages.length) return;
-    const deskW = desk.clientWidth;
-    const pad = deskW < 700 ? 24 : 64;
-    const maxW = Math.max(...state.pages.map(p => p.w));
-    const fit = Math.min((deskW - pad) / maxW, 1.5);
-    state.scale = Math.max(fit, 0.1) * state.zoom;
-    for (const p of state.pages) {
-      p.el.style.width = (p.w * state.scale) + 'px';
-      p.el.style.height = (p.h * state.scale) + 'px';
-    }
-    for (const p of state.pages) if (p.visible) renderPage(p);
-  }
-
-  async function renderPage(p) {
-    const target = state.scale;
-    if (p.rendered && Math.abs(p.rendered - target) / target < 0.02) return;
-    if (p.task) { try { p.task.cancel(); } catch (e) { /* ignore */ } }
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const vp = p.page.getViewport({ scale: target * dpr });
-    const off = document.createElement('canvas');
-    off.width = Math.ceil(vp.width); off.height = Math.ceil(vp.height);
-    const task = p.page.render({ canvasContext: off.getContext('2d'), viewport: vp });
-    p.task = task;
-    try { await task.promise; }
-    catch (e) { if (!(e && e.name === 'RenderingCancelledException')) console.error(e); return; }
-    if (p.task !== task) return;
-    p.canvas.width = off.width; p.canvas.height = off.height;
-    p.canvas.getContext('2d').drawImage(off, 0, 0);
-    p.rendered = target; p.task = null;
-  }
-
-  /* ---------- items on the page ---------- */
-  function place(node, it) {
-    node.style.left = (it.x * 100) + '%';
-    node.style.top = (it.y * 100) + '%';
-    node.style.width = (it.w * 100) + '%';
-    node.style.aspectRatio = '1 / ' + it.ar;
-  }
-  const LABEL = { signature: 'Signature', initials: 'Initials', date: 'Date', text: 'Text' };
-
-  function itemEl(it) {
-    const d = el('div', 'item' + (it.id === state.selected ? ' sel' : ''));
-    d.dataset.id = it.id;
-    place(d, it);
-    const img = new Image(); img.src = it.url; img.alt = LABEL[it.kind]; img.draggable = false;
-    d.append(img);
-    if (it.id === state.selected) {
-      const x = el('button', 'x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Remove');
-      d.append(x, el('span', 'rz'));
-    }
-    return d;
-  }
-  function renderItems() {
-    for (const p of state.pages) p.layer.replaceChildren();
-    for (const it of state.items) { const p = state.pages[it.page]; if (p) p.layer.append(itemEl(it)); }
-  }
-  function select(id) { state.selected = id; renderItems(); updatePanel(); }
-  function removeItem(id) {
-    state.items = state.items.filter(i => i.id !== id);
-    if (state.selected === id) state.selected = null;
-    renderItems(); updatePanel(); updateUI();
-  }
-
-  let drag = null, suppressUntil = 0;
-  pagesEl.addEventListener('pointerdown', e => {
-    const node = e.target.closest('.item');
-    if (!node || e.target.closest('.x')) return;
-    if (e.button !== undefined && e.button > 0) return;
-    const it = byId(node.dataset.id); if (!it) return;
-    const mode = e.target.closest('.rz') ? 'resize' : 'move';
-    if (state.selected !== it.id) select(it.id);
-    const live = pagesEl.querySelector('.item[data-id="' + it.id + '"]');
-    drag = { id: it.id, mode, sx: e.clientX, sy: e.clientY, x: it.x, y: it.y, w: it.w, rect: state.pages[it.page].layer.getBoundingClientRect(), node: live };
-    try { live.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-    e.preventDefault();
-  });
-  window.addEventListener('pointermove', e => {
-    if (!drag) return;
-    const it = byId(drag.id); if (!it) return;
-    const P = state.pages[it.page];
-    const dx = (e.clientX - drag.sx) / drag.rect.width, dy = (e.clientY - drag.sy) / drag.rect.height;
-    if (drag.mode === 'move') {
-      it.x = clamp(drag.x + dx, 0, 1 - it.w);
-      it.y = clamp(drag.y + dy, 0, Math.max(0, 1 - hFrac(it, P)));
-    } else {
-      const maxW = Math.min(1 - it.x, (1 - it.y) * P.h / (P.w * it.ar));
-      it.w = clamp(drag.w + dx, 0.03, maxW);
-      if (it.cw) it.fontPt = it.w * P.w / (it.cw / BASE);
-    }
-    place(drag.node, it);
-  });
-  const endDrag = () => { if (drag) { suppressUntil = performance.now() + 350; drag = null; } };
-  window.addEventListener('pointerup', endDrag);
-  window.addEventListener('pointercancel', endDrag);
-
-  pagesEl.addEventListener('click', e => {
-    if (e.target.closest('.x')) { if (state.selected) removeItem(state.selected); return; }
-    if (e.target.closest('.item')) return;
-    if (performance.now() < suppressUntil) return;
-    const pageEl = e.target.closest('.page');
-    if (state.armed && pageEl) {
-      const P = state.pages[+pageEl.dataset.n - 1];
-      const r = P.layer.getBoundingClientRect();
-      placeArmed(P, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
-      return;
-    }
-    if (state.selected) select(null);
-  });
-
-  function textImage(text, color) {
-    const S = 3, pad = 4;
-    const c = document.createElement('canvas');
-    const m = c.getContext('2d'); m.font = BASE + 'px ' + FONT;
-    const tw = Math.ceil(m.measureText(text || ' ').width);
-    const cw = tw + pad * 2, ch = Math.ceil(BASE * 1.35);
-    c.width = cw * S; c.height = ch * S;
-    const x = c.getContext('2d'); x.scale(S, S);
-    x.font = BASE + 'px ' + FONT; x.fillStyle = color; x.textBaseline = 'alphabetic';
-    x.fillText(text, pad, BASE * 1.02);
-    return { url: c.toDataURL('image/png'), ar: ch / cw, cw };
-  }
-
-  function placeArmed(P, fx, fy) {
-    const a = state.armed; let it;
-    if (a.kind === 'signature' || a.kind === 'initials') {
-      let w = a.kind === 'signature' ? 0.24 : 0.09;
-      const hf = w * a.ar * P.w / P.h;
-      if (hf > 0.12) w = 0.12 * P.h / (a.ar * P.w);
-      it = { kind: a.kind, url: a.url, ar: a.ar, w };
-    } else {
-      const text = a.kind === 'date' ? todayStr() : 'Text';
-      const img = textImage(text, INK.black);
-      it = { kind: a.kind, text, color: INK.black, fontPt: 11, cw: img.cw, url: img.url, ar: img.ar };
-      it.w = Math.min(it.fontPt * (it.cw / BASE) / P.w, 0.9);
-    }
-    it.id = uid(); it.page = P.n - 1;
-    const h = hFrac(it, P);
-    it.x = clamp(fx - it.w / 2, 0, Math.max(0, 1 - it.w));
-    it.y = clamp(fy - h / 2, 0, Math.max(0, 1 - h));
-    state.items.push(it);
-    arm(null); select(it.id); updateUI();
-    if (a.kind === 'text' && !matchMedia('(pointer: coarse)').matches) { const t = $('#selText'); t.focus(); t.select(); }
-  }
-
-  function arm(a) {
-    state.armed = a;
-    document.body.classList.toggle('armed', !!a);
-    $('#hint').hidden = !a;
-    if (a) {
-      state.selected = null; renderItems(); updatePanel();
-      $('#hintText').textContent = 'Click the page where the ' + LABEL[a.kind].toLowerCase() + ' should go.';
-    }
-  }
-  $('#hintCancel').addEventListener('click', () => arm(null));
-
-  /* ---------- selected-item panel ---------- */
-  function updatePanel() {
-    const it = selItem(), panel = $('#selPanel');
-    panel.hidden = !it;
-    if (!it) return;
-    $('#selTitle').textContent = LABEL[it.kind];
-    const isText = it.kind === 'text' || it.kind === 'date';
-    $('#selTextRow').hidden = !isText; $('#selColorRow').hidden = !isText;
-    if (isText) {
-      const t = $('#selText'); if (document.activeElement !== t) t.value = it.text;
-      for (const b of $('#selColorRow').querySelectorAll('button')) b.setAttribute('aria-pressed', String(b.dataset.color === it.color));
-    }
-  }
-  function retext(it, text, color) {
-    const P = state.pages[it.page];
-    const img = textImage(text, color);
-    it.text = text; it.color = color; it.cw = img.cw; it.url = img.url; it.ar = img.ar;
-    it.w = Math.min(it.fontPt * (it.cw / BASE) / P.w, 1 - it.x);
-    renderItems();
-  }
-  $('#selText').addEventListener('input', e => { const it = selItem(); if (it) retext(it, e.target.value, it.color); });
-  $('#selColorRow').addEventListener('click', e => {
-    const b = e.target.closest('button'); const it = selItem(); if (!b || !it) return;
-    retext(it, it.text, b.dataset.color); updatePanel();
-  });
-  $('#selDelete').addEventListener('click', () => { if (state.selected) removeItem(state.selected); });
-  $('#selAll').addEventListener('click', () => {
-    const it = selItem(); if (!it) return;
-    let added = 0;
-    state.pages.forEach((P, i) => {
-      if (i === it.page) return;
-      if (state.items.some(o => o.page === i && o.kind === it.kind && o.url === it.url && Math.abs(o.x - it.x) < 1e-6)) return;
-      const c = Object.assign({}, it, { id: uid(), page: i });
-      if (c.cw) c.w = Math.min(c.fontPt * (c.cw / BASE) / P.w, 0.95);
-      c.y = clamp(c.y, 0, Math.max(0, 1 - hFrac(c, P)));
-      state.items.push(c); added++;
-    });
-    renderItems(); updateUI();
-    toast(added ? 'Added to ' + added + ' more page' + (added > 1 ? 's' : '') + '.' : 'Already on every page.');
-  });
-
-  /* ---------- keyboard ---------- */
-  document.addEventListener('keydown', e => {
-    const modalOpen = !$('#dlg').hidden;
-    if (e.key === 'Escape') {
-      if (modalOpen) closeDlg(); else if (state.armed) arm(null); else if (state.selected) select(null);
-      return;
-    }
-    const tag = (document.activeElement && document.activeElement.tagName) || '';
-    if (modalOpen || /^(INPUT|TEXTAREA|SELECT)$/.test(tag)) return;
-    const it = selItem(); if (!it) return;
-    if (e.key === 'Delete' || e.key === 'Backspace') { removeItem(it.id); e.preventDefault(); return; }
-    const step = e.shiftKey ? 0.01 : 0.002, P = state.pages[it.page];
-    const mv = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
-    if (mv) {
-      it.x = clamp(it.x + mv[0], 0, 1 - it.w); it.y = clamp(it.y + mv[1], 0, Math.max(0, 1 - hFrac(it, P)));
-      const node = pagesEl.querySelector('.item[data-id="' + it.id + '"]'); if (node) place(node, it);
-      e.preventDefault();
-    }
-  });
-
-  /* ---------- toolbar ---------- */
-  function updateUI() {
-    const has = !!state.pdf;
-    $('#fileName').textContent = has ? state.name : 'No file';
-    $('#sampleTag').hidden = !(has && state.sample);
-    $('#pageNav').hidden = !has; $('#zoomGroup').hidden = !has;
-    $('#pgLabel').textContent = state.current + ' / ' + (state.pages.length || 1);
-    $('#zoomLabel').textContent = Math.round(state.zoom * 100) + '%';
-    const n = state.items.length;
-    const dl = $('#downloadBtn'); dl.disabled = !n; dl.textContent = n ? 'Download signed PDF (' + n + ')' : 'Download signed PDF';
-    dl.title = n ? '' : 'Place a signature or field first';
-    $('#empty').hidden = has;
-  }
-  function trackPage() {
-    if (!state.pages.length) return;
-    const top = desk.getBoundingClientRect().top + desk.clientHeight * 0.35;
-    let cur = state.pages.length;
-    for (const p of state.pages) { if (p.el.getBoundingClientRect().bottom > top) { cur = p.n; break; } }
-    if (cur !== state.current) { state.current = cur; $('#pgLabel').textContent = cur + ' / ' + state.pages.length; }
-  }
-  let raf = 0;
-  desk.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; trackPage(); }); });
-  const goPage = n => { const p = state.pages[clamp(n, 1, state.pages.length) - 1]; if (p) p.el.scrollIntoView({ block: 'start', behavior: 'smooth' }); };
-  $('#prevPg').addEventListener('click', () => goPage(state.current - 1));
-  $('#nextPg').addEventListener('click', () => goPage(state.current + 1));
-
-  function setZoom(z) {
-    const ratio = desk.scrollTop / Math.max(1, desk.scrollHeight);
-    state.zoom = z; layout(); desk.scrollTop = ratio * desk.scrollHeight; updateUI();
-  }
-  $('#zoomIn').addEventListener('click', () => { const nx = ZOOMS.find(z => z > state.zoom + 1e-6); if (nx) setZoom(nx); });
-  $('#zoomOut').addEventListener('click', () => { const pv = [...ZOOMS].reverse().find(z => z < state.zoom - 1e-6); if (pv) setZoom(pv); });
-  $('#zoomFit').addEventListener('click', () => setZoom(1));
-  let rt = 0;
-  new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(layout, 120); }).observe(desk);
-
-  /* ---------- opening files ---------- */
-  async function openFile(file) {
-    if (!file) return;
-    if (!/pdf$/i.test(file.type) && !/\.pdf$/i.test(file.name)) { toast('That file is not a PDF.'); return; }
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    await loadPdf(bytes, file.name, false);
-  }
-  $('#openBtn').addEventListener('click', () => $('#fileInput').click());
-  $('#emptyOpen').addEventListener('click', () => $('#fileInput').click());
-  $('#fileInput').addEventListener('change', e => { openFile(e.target.files[0]); e.target.value = ''; });
-  ['dragenter', 'dragover'].forEach(ev => desk.addEventListener(ev, e => { e.preventDefault(); desk.classList.add('dragging'); }));
-  desk.addEventListener('dragleave', e => { if (e.target === desk) desk.classList.remove('dragging'); });
-  desk.addEventListener('drop', e => { e.preventDefault(); desk.classList.remove('dragging'); openFile(e.dataTransfer.files[0]); });
-
-  $('#addDate').addEventListener('click', () => arm({ kind: 'date' }));
-  $('#addText').addEventListener('click', () => arm({ kind: 'text' }));
-  $('#dateSample').textContent = todayStr();
-  $('#newSignature').addEventListener('click', () => openDlg('signature'));
-  $('#newInitials').addEventListener('click', () => openDlg('initials'));
-
-  /* ---------- signature dialog ---------- */
-  const dlg = { kind: 'signature', tab: 'draw', color: INK.blue, strokes: [], cur: null, font: 0, up: { raw: null, canvas: null } };
-  const dc = $('#drawCanvas');
-  const dctx = dc.getContext('2d');
-  let dw = 0, dh = 0;
-  const R = 2;
-
-  function openDlg(kind) {
-    dlg.kind = kind; dlg.strokes = []; dlg.cur = null; dlg.up = { raw: null, canvas: null };
-    $('#dlgTitle').textContent = kind === 'signature' ? 'Create your signature' : 'Create your initials';
-    $('#dlgUse').textContent = kind === 'signature' ? 'Use signature' : 'Use initials';
-    $('#typeLabel').textContent = kind === 'signature' ? 'Your name' : 'Your initials';
-    $('#typeInput').value = ''; $('#upPreviewWrap').hidden = true;
-    $('#dlg').hidden = false;
-    setTab('draw');
-    sizeDraw();
-    buildFonts();
-    refreshUse();
-    $('#tabDraw').focus();
-  }
-  function closeDlg() { $('#dlg').hidden = true; }
-  $('#dlgClose').addEventListener('click', closeDlg);
-  $('#dlgCancel').addEventListener('click', closeDlg);
-  $('#dlg').addEventListener('pointerdown', e => { if (e.target === $('#dlg')) closeDlg(); });
-
-  function setTab(t) {
-    dlg.tab = t;
-    for (const b of document.querySelectorAll('.tabs button')) b.setAttribute('aria-selected', String(b.dataset.tab === t));
-    $('#panelDraw').hidden = t !== 'draw'; $('#panelType').hidden = t !== 'type'; $('#panelUpload').hidden = t !== 'upload';
-    if (t === 'draw') sizeDraw();
-    if (t === 'type') { buildFonts(); $('#typeInput').focus(); }
-    refreshUse();
-  }
-  document.querySelector('.tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setTab(b.dataset.tab); });
-
-  $('#inkPick').addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    dlg.color = b.dataset.color;
-    for (const x of $('#inkPick').querySelectorAll('button')) x.setAttribute('aria-pressed', String(x === b));
-    redraw(); buildFonts();
-  });
-
-  function sizeDraw() {
-    const r = dc.parentElement.getBoundingClientRect();
-    if (!r.width) return;
-    dw = r.width; dh = r.height;
-    dc.width = Math.round(dw * R); dc.height = Math.round(dh * R);
-    redraw();
-  }
-  function drawStroke(pts) {
-    if (pts.length === 1) { dctx.beginPath(); dctx.arc(pts[0].x, pts[0].y, 1.4, 0, Math.PI * 2); dctx.fill(); return; }
-    dctx.beginPath(); dctx.moveTo(pts[0].x, pts[0].y);
-    for (let i = 1; i < pts.length - 1; i++) {
-      const mx = (pts[i].x + pts[i + 1].x) / 2, my = (pts[i].y + pts[i + 1].y) / 2;
-      dctx.quadraticCurveTo(pts[i].x, pts[i].y, mx, my);
-    }
-    const l = pts[pts.length - 1]; dctx.lineTo(l.x, l.y); dctx.stroke();
-  }
-  function redraw() {
-    dctx.setTransform(R, 0, 0, R, 0, 0);
-    dctx.clearRect(0, 0, dw, dh);
-    dctx.strokeStyle = dlg.color; dctx.fillStyle = dlg.color;
-    dctx.lineWidth = 2.8; dctx.lineCap = 'round'; dctx.lineJoin = 'round';
-    for (const s of dlg.strokes) drawStroke(s);
-  }
-  const ptOf = e => { const r = dc.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
-  dc.addEventListener('pointerdown', e => {
-    dc.setPointerCapture(e.pointerId);
-    dlg.cur = [ptOf(e)]; dlg.strokes.push(dlg.cur); redraw(); e.preventDefault();
-  });
-  dc.addEventListener('pointermove', e => { if (!dlg.cur) return; dlg.cur.push(ptOf(e)); redraw(); });
-  const endStroke = () => { if (dlg.cur) { dlg.cur = null; refreshUse(); } };
-  dc.addEventListener('pointerup', endStroke);
-  dc.addEventListener('pointercancel', endStroke);
-  $('#drawUndo').addEventListener('click', () => { dlg.strokes.pop(); redraw(); refreshUse(); });
-  $('#drawClear').addEventListener('click', () => { dlg.strokes = []; redraw(); refreshUse(); });
-
-  function buildFonts() {
-    const grid = $('#fontGrid'); grid.replaceChildren();
-    const sample = $('#typeInput').value.trim() || (dlg.kind === 'signature' ? 'Your name' : 'AB');
-    SIG_FONTS.forEach((f, i) => {
-      const b = el('button', null, sample); b.type = 'button';
-      b.style.fontFamily = '"' + f + '", cursive'; b.style.color = dlg.color;
-      b.setAttribute('aria-pressed', String(i === dlg.font)); b.setAttribute('aria-label', 'Style ' + f);
-      b.addEventListener('click', () => { dlg.font = i; buildFonts(); });
-      grid.append(b);
-    });
-  }
-  $('#typeInput').addEventListener('input', () => { buildFonts(); refreshUse(); });
-
-  function trim(canvas, pad) {
-    const w = canvas.width, h = canvas.height;
-    const d = canvas.getContext('2d').getImageData(0, 0, w, h).data;
-    let x0 = w, y0 = h, x1 = -1, y1 = -1;
-    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-      if (d[(y * w + x) * 4 + 3] > 8) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
-    }
-    if (x1 < 0) return null;
-    const sw = x1 - x0 + 1, sh = y1 - y0 + 1;
-    const out = document.createElement('canvas'); out.width = sw + pad * 2; out.height = sh + pad * 2;
-    out.getContext('2d').drawImage(canvas, x0, y0, sw, sh, pad, pad, sw, sh);
-    return { url: out.toDataURL('image/png'), ar: out.height / out.width };
-  }
-  async function typedCanvas(text, family, color) {
-    try { await document.fonts.load('96px "' + family + '"', text); } catch (e) { /* fall back to cursive */ }
-    const size = 140, font = size + 'px "' + family + '", cursive';
-    const m = document.createElement('canvas').getContext('2d'); m.font = font;
-    const c = document.createElement('canvas');
-    c.width = Math.max(200, Math.ceil(m.measureText(text).width) + 140); c.height = size * 2;
-    const x = c.getContext('2d'); x.font = font; x.fillStyle = color; x.textBaseline = 'alphabetic';
-    x.fillText(text, 70, size * 1.3);
-    return c;
-  }
-
-  /* upload */
-  $('#upPick').addEventListener('click', () => $('#upInput').click());
-  $('#upInput').addEventListener('change', e => {
-    const f = e.target.files[0]; e.target.value = ''; if (!f) return;
-    const url = URL.createObjectURL(f), img = new Image();
-    img.onload = () => {
-      const s = Math.min(1, 1400 / Math.max(img.width, img.height));
-      const c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-      URL.revokeObjectURL(url); dlg.up.raw = c; processUpload();
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); toast('That image could not be read.'); };
-    img.src = url;
-  });
-  $('#upBg').addEventListener('change', processUpload);
-  function processUpload() {
-    const raw = dlg.up.raw; if (!raw) return;
-    const c = document.createElement('canvas'); c.width = raw.width; c.height = raw.height;
-    const x = c.getContext('2d'); x.drawImage(raw, 0, 0);
-    if ($('#upBg').checked) {
-      const im = x.getImageData(0, 0, c.width, c.height), d = im.data;
-      for (let i = 0; i < d.length; i += 4) {
-        const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-        d[i + 3] = lum >= 235 ? 0 : lum <= 130 ? 255 : Math.round((235 - lum) / 105 * 255);
-      }
-      x.putImageData(im, 0, 0);
-    }
-    dlg.up.canvas = c;
-    $('#upPreview').src = c.toDataURL('image/png'); $('#upPreviewWrap').hidden = false;
-    refreshUse();
-  }
-
-  function refreshUse() {
-    const ok = dlg.tab === 'draw' ? dlg.strokes.length > 0
-      : dlg.tab === 'type' ? $('#typeInput').value.trim() !== ''
-      : !!dlg.up.canvas;
-    $('#dlgUse').disabled = !ok;
-  }
-  $('#dlgUse').addEventListener('click', async () => {
-    let res = null;
-    if (dlg.tab === 'draw') res = trim(dc, 14);
-    else if (dlg.tab === 'type') res = trim(await typedCanvas($('#typeInput').value.trim(), SIG_FONTS[dlg.font], dlg.color), 14);
-    else res = dlg.up.canvas ? trim(dlg.up.canvas, 10) : null;
-    if (!res) { toast('Nothing to use yet.'); return; }
-    if ($('#remember').checked) {
-      state.saved[dlg.kind].unshift({ id: uid() + Date.now(), url: res.url, ar: res.ar });
-      state.saved[dlg.kind] = state.saved[dlg.kind].slice(0, 4);
-      persist(); renderSaved();
-    }
-    closeDlg();
-    arm({ kind: dlg.kind, url: res.url, ar: res.ar });
-  });
-
-  /* ---------- export ---------- */
-  function dataUrlBytes(url) {
-    const b = atob(url.split(',')[1]), u = new Uint8Array(b.length);
-    for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
-    return u;
-  }
-  async function exportPdf() {
-    if (!state.items.length) { toast('Place a signature or field first.'); return; }
-    const btn = $('#downloadBtn'); btn.disabled = true; btn.textContent = 'Preparing…';
-    document.body.classList.add('busy');
-    try {
-      const { PDFDocument, degrees } = PDFLib;
-      const doc = await PDFDocument.load(state.bytes, { ignoreEncryption: true });
-      const pgs = doc.getPages(), cache = new Map();
-      for (const it of state.items) {
-        const pg = pgs[it.page], P = state.pages[it.page];
-        let img = cache.get(it.url);
-        if (!img) { img = await doc.embedPng(dataUrlBytes(it.url)); cache.set(it.url, img); }
-        const box = pg.getCropBox();
-        const rot = ((pg.getRotation().angle % 360) + 360) % 360;
-        const dw = it.w * P.w, dh = dw * it.ar, dx = it.x * P.w, dy = it.y * P.h;
-        let x, y;
-        if (rot === 90)       { x = box.x + dy + dh;          y = box.y + dx; }
-        else if (rot === 180) { x = box.x + box.width - dx;   y = box.y + dy + dh; }
-        else if (rot === 270) { x = box.x + box.width - dy - dh; y = box.y + box.height - dx; }
-        else                  { x = box.x + dx;               y = box.y + box.height - dy - dh; }
-        pg.drawImage(img, { x, y, width: dw, height: dh, rotate: degrees(rot) });
-      }
-      const out = await doc.save();
-      const blob = new Blob([out], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = state.name.replace(/\.pdf$/i, '') + '-signed.pdf';
-      document.body.append(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 5000);
-      toast('Signed PDF saved.');
-    } catch (e) {
-      console.error(e);
-      toast('Could not create the signed PDF. ' + (e && e.message ? e.message : ''));
-    } finally {
-      document.body.classList.remove('busy'); updateUI();
-    }
-  }
-  $('#downloadBtn').addEventListener('click', exportPdf);
-
-  /* ---------- start ---------- */
-  async function boot() {
-    loadSaved(); renderSaved(); updateUI();
-    if (!window.pdfjsLib || !window.PDFLib) {
-      $('#emptyTitle').textContent = 'Could not load the PDF libraries';
-      $('#emptyText').textContent = 'Check your internet connection and reload this page.';
-      $('#emptyOpen').hidden = true; $('#empty').hidden = false;
-      return;
-    }
-  }
-  boot();
-})();
-</script>
 </body>
 </html>
