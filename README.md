@@ -11,6 +11,8 @@ Your documents never leave your device.
 - **Date and text fields** with black or blue ink and editable text.
 - **Drag, resize and nudge:** click a saved signature, click where it should go on the page, then drag to move and use the corner handle to resize. Arrow keys nudge it (hold Shift for bigger steps) and Delete removes it.
 - **Put on every page** copies an item to all other pages, which suits initials.
+- **Edit existing text:** turn on *Edit existing text*, click any highlighted line, and retype it. The tool covers the old text with a patch in the paper colour and places the new text in the same spot, matching size and ink colour and using the closest standard font (sans, serif or monospace).
+- **Organise pages:** a thumbnail view to reorder pages (drag the grip or use the arrows), rotate, duplicate or delete them, and add pages from another PDF. Marks stay attached to their page, and the download is rebuilt in the new order.
 - **Multi-page viewer** with page navigation and zoom. Pages render lazily, so long documents stay responsive.
 - **Saved signatures** can be kept in the browser's local storage for reuse (up to four signatures and four sets of initials).
 - **Light and dark themes**, following the system setting.
@@ -50,7 +52,10 @@ Both libraries are loaded from [cdnjs](https://cdnjs.com/). PDF.js runs its work
 ## Limitations
 
 - **Visual signatures only.** Signatures are stamped onto the page as images. They are not certificate-based digital signatures and give no tamper-evidence or signer identity verification. Legal weight depends on your jurisdiction and use case. If you need audit trails or identity checks, use a dedicated e-signature service.
-- Stamped content is flattened into the page and is not selectable text.
+- Stamped content, including edited text, is flattened into the page as an image and is not selectable text.
+- **Text editing is a cover-and-replace, not true editing.** The original text stays in the file underneath the patch, so someone can still select or extract it. Do not use it to hide private information. Fonts are matched to the nearest standard font, not the original. Scanned or image-only pages and rotated text cannot be edited.
+- Rotating a page is blocked while it has marks on it; remove them first, rotate, then place them again.
+- Rebuilding the page order creates a new PDF from the pages, so document-level extras such as bookmarks and interactive form fields are not carried over. If you only add marks, the original file is kept intact.
 - It does not fill in interactive PDF form fields.
 - Password-protected PDFs are not supported. Remove the password first.
 - An internet connection is needed on first load for the libraries and fonts (see below for going offline).
@@ -79,4 +84,7 @@ Everything lives in `countersign.html`:
 - Certificate-based signing (this usually needs a small server or a dedicated signing library)
 - Filling interactive form fields
 - Saving and restoring a signing session
- 
+
+## License
+
+Add the licence of your choice here (for example MIT). PDF.js is licensed under Apache 2.0 and pdf-lib under MIT.
